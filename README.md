@@ -6,7 +6,7 @@ Repositorio de trabajos practicos de aplicaciones para Aspectos Legales
 
 docker build -t flaskapp
 
-# Levantar conteiner
+# Levantar container
 
 docker run -it -p 4000:7000 -d flaskapp
 
