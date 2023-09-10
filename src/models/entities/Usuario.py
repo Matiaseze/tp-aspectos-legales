@@ -1,3 +1,5 @@
+from werkzeug.security import check_password_hash
+
 class Usuario():
 
     def __init__(self,id_usuario, nombre=None, clave=None,t_usuario=None,mail=None) -> None:
@@ -15,3 +17,7 @@ class Usuario():
             't_usuario' : self.t_usuario,
             'mail' : self.mail
         }
+    
+    @classmethod
+    def check_password(self, hashed_password, password):
+        return check_password_hash(hashed_password, password)

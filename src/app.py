@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, render_template, request, redirect, url_for
 from config import config
 
 #Rutas
@@ -6,15 +6,17 @@ from routes import Usuario
 
 app = Flask(__name__)
 
-@app.route('/', methods=['GET'])
-def ping():
-    return jsonify({'response' : 'Hola'})
+@app.route('/home')
+def home():
+    return render_template('home.html')
+
 
 def page_not_found(error):
     return "<h1>Pagina no encontrada :/</h1>", 404
 
 #Blueprints
-app.register_blueprint(Usuario.main, url_prefix=('/usuarios'))
+app.register_blueprint(Usuario.main, url_prefix=('/login'))
+
 
 if __name__ == '__main__' :
     app.config.from_object(config['development'])

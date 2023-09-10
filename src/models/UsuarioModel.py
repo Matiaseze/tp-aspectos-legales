@@ -2,6 +2,25 @@ from database.db import get_connection
 from .entities.Usuario import Usuario
 
 class UsuarioModel():
+
+    @classmethod
+    def login(self, user):
+        try:
+            connection=get_connection()
+
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT id_usuario, nombre, clave, t_usuario, mail FROM usuarios WHERE nombre = %s", (user,))
+                row=cursor.fetchone()
+                usuario = None
+                if row is not None:
+                    usuario=Usuario(row[0],row[1],Usuario.check_password(row[2], user.password),row[3],row[4])
+                    return usuario
+            connection.close()
+            return usuario
+        except Exception as ex:
+            raise Exception(ex)
+
+
     @classmethod
     def get_usuarios(self):
         try:
