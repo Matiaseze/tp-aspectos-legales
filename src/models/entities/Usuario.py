@@ -1,9 +1,9 @@
 from werkzeug.security import check_password_hash
+from flask_login import UserMixin
+class Usuario(UserMixin):
 
-class Usuario():
-
-    def __init__(self,id_usuario, nombre=None, clave=None,t_usuario=None,mail=None) -> None:
-        self.id_usuario=id_usuario
+    def __init__(self,id, nombre, clave,t_usuario="",mail="") -> None:
+        self.id=id
         self.nombre=nombre
         self.clave=clave
         self.t_usuario=t_usuario
@@ -11,7 +11,7 @@ class Usuario():
 
     def to_JSON(self):
         return {
-            'id_usuario' : self.id_usuario,
+            'id' : self.id,
             'nombre' : self.nombre,
             'clave' : self.clave,
             't_usuario' : self.t_usuario,

@@ -43,3 +43,8 @@ UPDATE public.usuarios
 select * from usuarios
 					   
 SELECT id_usuario, nombre, clave, t_usuario, mail FROM usuarios ORDER BY id_usuario
+
+-- Cambiar en usuarios id_usuario por id
+UPDATE public.usuarios
+	SET clave='pbkdf2:sha256:600000$wJ9ct2HBNXJs96dW$1cf364759b758475946299e88e70a075df153927935d58285563833302555254', mail='admin@admin.com'
+	WHERE id_usuario=1;

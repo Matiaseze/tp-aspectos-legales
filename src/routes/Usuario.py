@@ -3,28 +3,7 @@ from flask import Blueprint, jsonify, render_template, request, flash, redirect,
 #Modelos
 from models.UsuarioModel import UsuarioModel
 
-#Entidades
-from models.entities import Usuario
-
 main=Blueprint('usuario_blueprint',__name__)
-
-
-@main.route('/', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        user = Usuario(0, request.form['username'],request.form['password'], 0,None )
-        logged_user = UsuarioModel.login(user)
-        if logged_user is not None:
-            if logged_user.password:
-                return redirect(url_for('home'))
-            else:
-                flash("Contraseña incorrecta")
-        else:
-            flash("Usuario no encontrado")
-            return render_template('auth/login.html')
-
-    else:
-        return render_template('auth/login.html')
 
 @main.route('/')
 def get_usuarios():
@@ -43,7 +22,6 @@ def get_usuario(id):
             return jsonify(usuario)
         else:
             return jsonify({}), 404
-
 
     except Exception as ex:
         return jsonify({'message' : str(ex)}),500

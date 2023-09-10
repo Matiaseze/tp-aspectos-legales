@@ -9,11 +9,11 @@ class UsuarioModel():
             connection=get_connection()
 
             with connection.cursor() as cursor:
-                cursor.execute("SELECT id_usuario, nombre, clave, t_usuario, mail FROM usuarios WHERE nombre = %s", (user,))
+                cursor.execute("SELECT id, nombre, clave, t_usuario, mail FROM usuarios WHERE nombre = %s", (user.nombre,))
                 row=cursor.fetchone()
                 usuario = None
                 if row is not None:
-                    usuario=Usuario(row[0],row[1],Usuario.check_password(row[2], user.password),row[3],row[4])
+                    usuario=Usuario(row[0],row[1],Usuario.check_password(row[2], user.clave),row[3],row[4])
                     return usuario
             connection.close()
             return usuario
@@ -28,7 +28,7 @@ class UsuarioModel():
             usuarios=[]
 
             with connection.cursor() as cursor:
-                cursor.execute("SELECT id_usuario, nombre, clave, t_usuario, mail FROM usuarios ORDER BY id_usuario")
+                cursor.execute("SELECT id, nombre, t_usuario, mail FROM usuarios ORDER BY id")
                 resultset=cursor.fetchall()
                 for row in resultset:
                     usuario=Usuario(row[0],row[1],row[2],row[3],row[4])
@@ -45,12 +45,11 @@ class UsuarioModel():
             connection=get_connection()
 
             with connection.cursor() as cursor:
-                cursor.execute("SELECT id_usuario, nombre, clave, t_usuario, mail FROM usuarios WHERE id_usuario = %s", (id,))
+                cursor.execute("SELECT id, nombre, t_usuario, mail FROM usuarios WHERE id = %s", (id,))
                 row=cursor.fetchone()
                 usuario = None
                 if row is not None:
-                    usuario=Usuario(row[0],row[1],row[2],row[3],row[4])
-                    usuario = usuario.to_JSON()
+                    usuario=Usuario(row[0],row[1],row[2],row[3])
             
             connection.close()
             return usuario
