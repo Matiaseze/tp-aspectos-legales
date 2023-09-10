@@ -3,7 +3,7 @@ from .entities.Usuario import Usuario
 
 class UsuarioModel():
     @classmethod
-    def get_usuario(self):
+    def get_usuarios(self):
         try:
             connection=get_connection()
             usuarios=[]
@@ -11,12 +11,29 @@ class UsuarioModel():
             with connection.cursor() as cursor:
                 cursor.execute("SELECT id_usuario, nombre, clave, t_usuario, mail FROM usuarios ORDER BY id_usuario")
                 resultset=cursor.fetchall()
-
                 for row in resultset:
                     usuario=Usuario(row[0],row[1],row[2],row[3],row[4])
-                    usuarios.append(usuario)
+                    usuarios.append(usuario.to_JSON())
             
             connection.close()
             return usuarios
+        except Exception as ex:
+            raise Exception(ex)
+        
+    @classmethod
+    def get_usuario(self, id):
+        try:
+            connection=get_connection()
+
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT id_usuario, nombre, clave, t_usuario, mail FROM usuarios WHERE id_usuario = %s", (id,))
+                row=cursor.fetchone()
+                usuario = None
+                if row is not None:
+                    usuario=Usuario(row[0],row[1],row[2],row[3],row[4])
+                    usuario = usuario.to_JSON()
+            
+            connection.close()
+            return usuario
         except Exception as ex:
             raise Exception(ex)

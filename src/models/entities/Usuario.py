@@ -7,11 +7,11 @@ class Usuario():
         self.t_usuario=t_usuario
         self.mail=mail
 
-def to_JSON(self):
-    return {
-        'id_usuario' : self.id_usuario,
-        'nombre' : self.id_usuario,
-        'clave' : self.clave,
-        't_usuario' : self.t_usuario,
-        'mail' : self.mail
-    }
+    def to_JSON(self):
+        return {
+            'id_usuario' : self.id_usuario,
+            'nombre' : self.nombre,
+            'clave' : self.clave,
+            't_usuario' : self.t_usuario,
+            'mail' : self.mail
+        }
