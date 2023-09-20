@@ -17,7 +17,6 @@ def get_usuarios():
 def get_usuario(id):
     try:
         usuario=UsuarioModel.get_usuario(id)
-        print(usuario)
         if usuario is not None:
             return jsonify(usuario)
         else:

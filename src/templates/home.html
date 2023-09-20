@@ -7,8 +7,15 @@ Home
 {% block customCSS %}
 {% endblock  %}
 
+{% block sidebar %}
+
+{% endblock %}
+
 {% block body %}
 <h1>Alohaaa  {{ current_user.nombre }}</h1>
+
+
+<a class="btn btn-secondary" href="{{ url_for('logout')}}"> Logout </a>
 {% endblock  %}
 
 
