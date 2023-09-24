@@ -14,20 +14,14 @@
 
 </head>
 
-<body class="text-center">
-    <div class="col-2 mt-4">
-    {% block sidebar %}
-    {% include 'sidebar.html' %}
+<body>
+    {% block container %}
+    
     {% endblock %}
-    </div>
-    <div class="col-8 mt-4">
-    {% block body %}
-
-    {% endblock %}
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-        crossorigin="anonymous"></script>
-    </div>
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
 </body>
 
 </html>
