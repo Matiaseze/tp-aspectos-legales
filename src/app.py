@@ -3,7 +3,7 @@ from config import config
 from flask_login import LoginManager, login_user, logout_user, login_required
 from flask_wtf.csrf import CSRFProtect
 #Rutas
-from routes import Usuario, User
+from routes import Usuario, User, Paciente
 #Modelos
 from models.UsuarioModel import UsuarioModel
 
@@ -43,7 +43,7 @@ def pag_unauthorized(error):
 #Blueprints
 app.register_blueprint(User.main, url_prefix=('/login'))
 app.register_blueprint(Usuario.main, url_prefix=('/usuarios'))
-
+app.register_blueprint(Paciente.main, url_prefix=('/pacientes'))
 
 if __name__ == '__main__' :
     app.config.from_object(config['development'])

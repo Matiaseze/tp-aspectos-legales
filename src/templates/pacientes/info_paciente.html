@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block container %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{ titulo }}</h1>
+            <table id="data" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Documento</th>
+                        <th>Nombre y apellido</th>
+                        <th>E-Mail</th>
+                        <th>Telefono</th>
+                        <th>Localidad</th>
+                        <th>Domicilio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ user.usuario }}</td>
+                        <td>{{ user.nombre }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.telefono }}</td>
+                        <td>{{ user.localidad }}</td>
+                        <td>{{ user.direccion }}</td>
+                    </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}
