@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  flask-app:
+    build: . 
+    volumes:
+      - ./src:/app
+    ports:
+      - "7000:7000"
+    depends_on:
+      - dbpg
+
+  dbpg:
+    image: postgres:latest
+    env_file: 
+      - .env
+    ports: 
+      - "5432:5432"
+    expose: 
+      - "5432"  
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=flask-restapi
+    volumes: 
+      - postgres_data:/var/lib/postgresql/data/
+      - ./backup.sql:/docker-entrypoint-initdb.d/backup.sql
