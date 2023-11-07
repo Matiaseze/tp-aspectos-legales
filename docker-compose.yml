@@ -23,5 +23,5 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=flask-restapi
     volumes: 
-      - postgres_data:/var/lib/postgresql/data/
+      - ./postgres_data:/var/lib/postgresql/data/
       - ./backup.sql:/docker-entrypoint-initdb.d/backup.sql

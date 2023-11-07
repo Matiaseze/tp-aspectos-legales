@@ -2,6 +2,10 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from config import config
 from flask_login import LoginManager, login_user, logout_user, login_required
 from flask_wtf.csrf import CSRFProtect
+from flask_mail import Mail
+
+from itsdangerous import URLSafeTimedSerializer
+
 #Rutas
 from routes import Usuario, User, Paciente
 #Modelos
@@ -12,8 +16,6 @@ csrf=CSRFProtect()
 
 login_manager_app = LoginManager(app)
 
-
-
 @login_manager_app.user_loader
 def load_user(id):
     return UsuarioModel.get_usuario(id)
@@ -22,6 +24,11 @@ def load_user(id):
 @app.route('/')
 def login():
     return render_template('auth/login.html')
+
+@app.route('/signup')
+def signup():
+    return render_template('auth/signup.html')
+
 
 @app.route('/logout')
 def logout():
@@ -46,6 +53,15 @@ app.register_blueprint(Usuario.main, url_prefix=('/usuarios'))
 app.register_blueprint(Paciente.main, url_prefix=('/pacientes'))
 
 if __name__ == '__main__' :
+
+    # Mail
+    app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+    app.config['MAIL_PORT'] = 587
+    app.config['MAIL_USE_TLS'] = True
+    app.config['MAIL_USERNAME'] = 'tu_correo@gmail.com'
+    app.config['MAIL_PASSWORD'] = 'tu_contraseña'
+    mail = Mail(app)
+
     app.config.from_object(config['development'])
     csrf.init_app(app)
     #Manejador, error 404
