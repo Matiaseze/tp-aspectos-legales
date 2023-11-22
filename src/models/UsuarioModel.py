@@ -20,6 +20,17 @@ class UsuarioModel():
         except Exception as ex:
             raise Exception(ex)
 
+    @classmethod
+    def user_confirmed(self, user):
+        print(user)
+        connection=get_connection()
+        
+        if user.is_confirmed:
+            return ('La cuenta ya ha sido confirmada. Inicia sesión.', 'success')
+        else:
+            user.is_confirmed = True
+            connection.commit()
+            return ('Has confirmado tu cuenta. Gracias.', 'success')
 
     @classmethod
     def get_usuarios(self):
@@ -40,7 +51,7 @@ class UsuarioModel():
             raise Exception(ex)
         
     @classmethod
-    def get_usuario(self, id):
+    def get_usuario_id(self, id):
         try:
             connection=get_connection()
 
@@ -55,3 +66,40 @@ class UsuarioModel():
             return usuario
         except Exception as ex:
             raise Exception(ex)
+        
+    @classmethod
+    def get_usuario_mail(self, email):
+        try:
+            connection=get_connection()
+
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT id, nombre, mail, is_confirmed FROM usuarios WHERE mail = %s", (email,))
+                row=cursor.fetchone()
+                usuario = None
+                if row is not None:
+                    usuario=Usuario(row[0],row[1],row[2],row[3])
+            
+            connection.close()
+            return usuario
+        except Exception as ex:
+            raise Exception(ex)
+        
+    @classmethod
+    def add_usuario(self, usuario):
+        clave = Usuario.generate_password(usuario.clave)
+        print ("En add user")
+        print(usuario)
+        try:
+            connection=get_connection()
+
+            with connection.cursor() as cursor:
+                cursor.execute("INSERT INTO usuarios (id, nombre, clave, t_usuario, mail, is_confirmed) VALUES ((SELECT COUNT(id)+1 FROM usuarios),%s, %s, %s, %s, %s)", (usuario.nombre, clave, usuario.t_usuario, usuario.mail, usuario.is_confirmed))
+                print ('usuario insertado')
+                connection.commit()
+            return True
+        except Exception as ex:
+            print(f"Error al agregar usuario: {ex}")
+            return False
+        finally:
+            connection.close()
+        

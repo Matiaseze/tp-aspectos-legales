@@ -56,7 +56,7 @@ CREATE OR REPLACE FUNCTION registro_usuario()
 RETURNS TRIGGER AS $$
 BEGIN
 	IF NEW.t_usuario = 1 THEN
-		INSERT INTO pacientes("numDoc",nombre,apellido,email,telefono,domicilio)
+		INSERT INTO pacientes("numDoc",nombre,apellido,mail,telefono,domicilio)
 		VALUES (NEW.id, NEW.nombre, '',NEW.mail,'','');
 		
 	END IF;

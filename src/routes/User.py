@@ -1,15 +1,21 @@
-from flask import Blueprint, jsonify, render_template, request, flash, redirect, url_for
+from flask import Blueprint, jsonify, render_template, request, flash, redirect, url_for#, current_app
 from flask_login import LoginManager, login_user, logout_user, login_required
-from itsdangerous import URLSafeTimedSerializer
+from flask_mail import Message
+from flask import current_app as app
+from itsdangerous import URLSafeTimedSerializer, BadSignature
+from flask_wtf.csrf import CSRFProtect
+
+
 #Modelos
 from models.UsuarioModel import UsuarioModel
 
 #Entidades
 from models.entities.Usuario import Usuario
 
-main=Blueprint('user_blueprint',__name__)
+auth=Blueprint('user_blueprint', __name__)
+csrf = CSRFProtect()
 
-@main.route('/', methods=['GET', 'POST'])
+@auth.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         user = Usuario(0, request.form['username'], request.form['password'])
@@ -26,26 +32,65 @@ def login():
             return render_template('auth/login.html')
 
     else:
-        return render_template('auth/login.html')
+        return render_template('auth/home.html')
     
-# @main.route('/registro', methods=['GET', 'POST'])
-# def register():
-#     if request.method == 'POST':
-#         # Recopilar datos del formulario
-#         username = request.form['username']
-#         email = request.form['email']
-#         password = request.form['password']
+@auth.route('/signup2', methods=['GET', 'POST'])
+@csrf.exempt
+def register():
+    if request.method == 'POST':
+        # Recopilar datos del formulario
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
 
-#         # Crear un usuario en la base de datos
-#         user = User(username=username, email=email, password=password)
+        print('DEBUG')
+        print(f'Usuario: {username}, Email: {email}, Contraseña: {password}')
 
-#         # Generar un token de confirmación y enviar el correo de confirmación
-#         token = serializer.dumps(email, salt='email-confirm')
-#         confirm_url = url_for('confirm_email', token=token, _external=True)
-#         send_confirmation_email(email, confirm_url)
+        # Crear un usuario en la base de datos
+        user = Usuario(id=0, nombre=username, mail=email, clave=password, is_confirmed=False, t_usuario=1)
+        if user is not None:
+            UsuarioModel.add_usuario(user)
 
 
-#         flash('Registro exitoso. Verifica tu correo para confirmar la cuenta.', 'success')
-#         return redirect(url_for('login'))
+        token = generate_confirmation_token(user.mail)
+        confirm_url = url_for('user_blueprint.confirm_email', token=token, _external=True)
+    
+        msg = Message('Confirma tu cuenta', recipients=[user.mail])
+        msg.body = f'Para confirmar tu cuenta, haz clic en el siguiente enlace: {confirm_url}'
+    
+        mail = app.get_mail()
+        mail.send(msg)
+    flash('Se ha enviado un correo de confirmación a tu dirección de correo electrónico.', 'success')
+    return redirect(url_for('auth.login'))
 
-#     return render_template('register.html')
+# Metodo para generar token de confirmacion
+def generate_confirmation_token(email):
+    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+    return serializer.dumps(email, salt=app.config['SECURITY_PASSWORD_SALT'])
+
+# Funcion para confimar correo
+
+@auth.route('/confirm/<token>')
+def confirm_email(token):
+    email = confirm_token(token)
+    
+    if not email:
+        flash('El enlace de confirmación es inválido o ha expirado.', 'danger')
+        return redirect(url_for('auth.login'))
+    
+    user = Usuario.query.filter_by(email=email).first_or_404()
+
+    flash (Usuario.user_confirmed(user))
+
+    return redirect(url_for('auth.login'))
+    
+# Funcion para confimar token
+
+def confirm_token(token, expiration=3600):
+    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+    try:
+        email = serializer.loads(token, salt=app.config['SECURITY_PASSWORD_SALT'], max_age=expiration)
+    except BadSignature:
+        return False
+    return email
+
