@@ -9,7 +9,7 @@ class UsuarioModel():
             connection=get_connection()
 
             with connection.cursor() as cursor:
-                cursor.execute("SELECT id, nombre, clave, t_usuario, mail FROM usuarios WHERE nombre = %s", (user.nombre,))
+                cursor.execute("SELECT id, usuario, clave, t_usuario, mail FROM usuarios WHERE usuario = %s", (user.nombre,))
                 row=cursor.fetchone()
                 usuario = None
                 if row is not None:
@@ -39,7 +39,7 @@ class UsuarioModel():
             usuarios=[]
 
             with connection.cursor() as cursor:
-                cursor.execute("SELECT id, nombre, t_usuario, mail FROM usuarios ORDER BY id")
+                cursor.execute("SELECT id, usuario, t_usuario, mail FROM usuarios ORDER BY id")
                 resultset=cursor.fetchall()
                 for row in resultset:
                     usuario=Usuario(row[0],row[1],row[2],row[3],row[4])
@@ -56,7 +56,7 @@ class UsuarioModel():
             connection=get_connection()
 
             with connection.cursor() as cursor:
-                cursor.execute("SELECT id, nombre, t_usuario, mail FROM usuarios WHERE id = %s", (id,))
+                cursor.execute("SELECT id, usuario, t_usuario, mail FROM usuarios WHERE id = %s", (id,))
                 row=cursor.fetchone()
                 usuario = None
                 if row is not None:
@@ -73,7 +73,7 @@ class UsuarioModel():
             connection=get_connection()
 
             with connection.cursor() as cursor:
-                cursor.execute("SELECT id, nombre, mail, is_confirmed FROM usuarios WHERE mail = %s", (email,))
+                cursor.execute("SELECT id, usuario, mail, is_confirmed FROM usuarios WHERE mail = %s", (email,))
                 row=cursor.fetchone()
                 usuario = None
                 if row is not None:
@@ -83,7 +83,18 @@ class UsuarioModel():
             return usuario
         except Exception as ex:
             raise Exception(ex)
-        
+    @classmethod
+    def get_tipo_usuario(cls, username):
+        try:
+            connection = get_connection()
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT t_usuario FROM usuarios WHERE usuario = %s", (username,))
+                tipo_usuario = cursor.fetchone()
+            connection.close()
+            return tipo_usuario[0] if tipo_usuario else None
+        except Exception as ex:
+            raise Exception(ex)
+    
     @classmethod
     def add_usuario(self, usuario):
         clave = Usuario.generate_password(usuario.clave)
@@ -93,7 +104,7 @@ class UsuarioModel():
             connection=get_connection()
 
             with connection.cursor() as cursor:
-                cursor.execute("INSERT INTO usuarios (id, nombre, clave, t_usuario, mail, is_confirmed) VALUES ((SELECT COUNT(id)+1 FROM usuarios),%s, %s, %s, %s, %s)", (usuario.nombre, clave, usuario.t_usuario, usuario.mail, usuario.is_confirmed))
+                cursor.execute("INSERT INTO usuarios (id, usuario, clave, t_usuario, mail, is_confirmed) VALUES ((SELECT COUNT(id)+1 FROM usuarios),%s, %s, %s, %s, %s)", (usuario.nombre, clave, usuario.t_usuario, usuario.mail, usuario.is_confirmed))
                 print ('usuario insertado')
                 connection.commit()
             return True

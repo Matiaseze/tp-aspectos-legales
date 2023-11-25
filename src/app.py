@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from config import config
 from utils.auth_confirm import confirm_token, generate_confirmation_token
-from flask_login import LoginManager, login_user, logout_user, login_required
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_wtf.csrf import CSRFProtect
 from flask_mail import Mail, Message
 
@@ -54,9 +54,9 @@ def login():
     # Si no es POST es GET
     return render_template('auth/login.html')
 
-@app.route('/singup')
-def singup():
-    return render_template('auth/singup.html')
+@app.route('/signup')
+def signup():
+    return render_template('auth/register.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 @csrf.exempt
@@ -115,7 +115,8 @@ def logout():
 @app.route('/home')
 @login_required
 def home():
-    return render_template('home.html')
+    tipo_usuario = UsuarioModel.get_tipo_usuario(current_user.nombre)
+    return render_template('home.html', tipo_usuario=tipo_usuario)
 
 def page_not_found(error):
     return "<h1>Pagina no encontrada :/</h1>", 404

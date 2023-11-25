@@ -6,8 +6,8 @@ create table tipo_usuario (cod_tipo INT,
 						  UNIQUE (cod_tipo)
 						  );
 
-create table usuarios (id_usuario INT,
-					   nombre VARCHAR(30),
+create table usuarios (id INT,
+					   usuario VARCHAR(30),
 					   clave VARCHAR(50),
 					   t_usuario INT,
 					   mail VARCHAR(99),
@@ -16,48 +16,63 @@ create table usuarios (id_usuario INT,
 					  REFERENCES tipo_usuario (cod_tipo)
 					  );
 
-create table pacientes ("numDoc" INT,
+create table pacientes (num_doc INT,
 						nombre VARCHAR(99),
 						apellido VARCHAR(99),
 						mail VARCHAR(99),
 						telefono VARCHAR(99),
 						domicilio VARCHAR(99),
-						CONSTRAINT "pkPaciente" PRIMARY KEY ("numDoc")
+						CONSTRAINT "pkPaciente" PRIMARY KEY (num_doc)
+						);
+
+create table medicos (num_doc INT,
+						nombre VARCHAR(99),
+						apellido VARCHAR(99),
+						legajo VARCHAR(4),
+						mail VARCHAR(99),
+						telefono VARCHAR(99),
+						domicilio VARCHAR(99),
+						CONSTRAINT "pkDoctor" PRIMARY KEY (num_doc)
 						);
 
 INSERT INTO public.tipo_usuario(
 	cod_tipo, nombre_tipo)
-	VALUES (1, 'admin');
+	VALUES (1, 'Paciente');
 	
 INSERT INTO public.tipo_usuario(
 	cod_tipo, nombre_tipo)
-	VALUES (2, 'doctor');
+	VALUES (2, 'Medico');
+	
+INSERT INTO public.tipo_usuario(
+	cod_tipo, nombre_tipo)
+	VALUES (3, 'Admin');
 			   
 INSERT INTO public.usuarios(
-	id_usuario, nombre, clave, t_usuario, mail)
-	VALUES (2, 'matiasb', 'clave', 1, 'matias@matias.com');
+	id, nombre, clave, t_usuario, mail)
+	VALUES (1, 'Admin', 'pbkdf2:sha256:600000$dhAuQeZ7LCMsIeao$42e0eb7e04daedf3f944375ae162891d8af3f7c64440d3f07290495d035b0347', 3, 'admin@admin.com');
 	
-UPDATE public.usuarios
-	SET t_usuario=2, mail='doctor@doctor.com'
-	WHERE id_usuario = 1;
+
+
+-- Doctor 1
+INSERT INTO public.usuarios (id, nombre, clave, t_usuario, mail)
+VALUES (2, 'DrSmith', 'pbkdf2:sha256:600000$3Nf2NYK9sG8csIPV$ebeec16c450a1d7f8e9bbc61fcd4fb9318b881e1133f431f4f25bb3685b7132b', 2, 'dr.smith@johndoe.com');
+
+-- Doctor 2
+INSERT INTO public.usuarios (id, nombre, clave, t_usuario, mail)
+VALUES (3, 'DrJohnson', 'pbkdf2:sha256:600000$X4geqNidLMrSsAPM$ef7a6121bbb0af97a3b769763777263916cc1a6e6da9e326ad9457b89bca50e3', 2, 'dr.johnson@johndoe.com');
+
+-- Doctor 3
+INSERT INTO public.usuarios (id, nombre, clave, t_usuario, mail)
+VALUES (4, 'DrAnderson', 'pbkdf2:sha256:600000$Boi0Lhmf2mG5uOgS$0596edb307f386607494cf755b746a7a494581563d5748378f474115b905d99a', 2, 'dr.anderson@johndoe.com');
 	
-select * from usuarios
-					   
-SELECT id_usuario, nombre, clave, t_usuario, mail FROM usuarios ORDER BY id_usuario
-
--- Cambiar en usuarios id_usuario por id
-UPDATE public.usuarios
-	SET clave='pbkdf2:sha256:600000$wJ9ct2HBNXJs96dW$1cf364759b758475946299e88e70a075df153927935d58285563833302555254', mail='admin@admin.com'
-	WHERE id_usuario=1;
-
 -- Funcion del registro de usuarios
 
 CREATE OR REPLACE FUNCTION registro_usuario()
 RETURNS TRIGGER AS $$
 BEGIN
 	IF NEW.t_usuario = 1 THEN
-		INSERT INTO pacientes("numDoc",nombre,apellido,mail,telefono,domicilio)
-		VALUES (NEW.id, NEW.nombre, '',NEW.mail,'','');
+		INSERT INTO pacientes(num_doc,nombre,apellido,mail,telefono,domicilio)
+		VALUES (CAST(NEW.usuario AS INT), '','',NEW.mail,'','');
 		
 	END IF;
 	RETURN NEW;
@@ -67,8 +82,4 @@ $$ LANGUAGE plpgsql;
 -- Crear Trigger que activa la funcion
 CREATE TRIGGER usuario_registrado AFTER INSERT ON usuarios FOR EACH ROW EXECUTE FUNCTION registro_usuario();
 
-Insert into tipo_usuario (cod_tipo,nombre_tipo) Values (1,'Paciente');
-
-INSERT INTO public.usuarios(
-	id, nombre, clave, t_usuario, mail)
-	VALUES ('2','juan', 'pbkdf2:sha256:600000$wJ9ct2HBNXJs96dW$1cf364759b758475946299e88e70a075df153927935d58285563833302555254', 1, 'juan@juan.com' );
+select * from usuarios

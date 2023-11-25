@@ -1,30 +1,61 @@
-{% extends 'base.html' %}
+{% extends './main.html' %}
 
-{% block container %}
-    <div class="row">
-        <div class="col-md-12">
-            <h1>{{ titulo }}</h1>
-            <table id="data" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Documento</th>
-                        <th>Nombre y apellido</th>
-                        <th>E-Mail</th>
-                        <th>Telefono</th>
-                        <th>Localidad</th>
-                        <th>Domicilio</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{ user.usuario }}</td>
-                        <td>{{ user.nombre }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>{{ user.telefono }}</td>
-                        <td>{{ user.localidad }}</td>
-                        <td>{{ user.direccion }}</td>
-                    </tr>
-            </table>
+{% block titulo %}
+Información del Paciente
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Información del Paciente</h2>
+    
+    <!-- Muestra la información actual del paciente -->
+    <p><strong>Nombre:</strong> {{ paciente.nombre }}</p>
+    <p><strong>Apellido:</strong> {{ paciente.apellido }}</p>
+    <p><strong>Email:</strong> {{ paciente.email }}</p>
+    <p><strong>Teléfono:</strong> {{ paciente.telefono }}</p>
+    <p><strong>Localidad:</strong> {{ paciente.localidad }}</p>
+    <p><strong>Domicilio:</strong> {{ paciente.domicilio }}</p>
+
+    <hr>
+
+    <!-- Formulario para modificar la información del paciente -->
+    <h3>Modificar Información</h3>
+    <form method="POST" action="{{ url_for('actualizar_informacion', num_doc=paciente.num_doc) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <!-- Campos de formulario para la actualización -->
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" value="{{ paciente.nombre }}">
         </div>
-    </div>
+
+        <div class="mb-3">
+            <label for="apellido" class="form-label">Apellido</label>
+            <input type="text" class="form-control" id="apellido" name="apellido" value="{{ paciente.apellido }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ paciente.email }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input type="text" class="form-control" id="telefono" name="telefono" value="{{ paciente.telefono }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="localidad" class="form-label">Localidad</label>
+            <input type="text" class="form-control" id="localidad" name="localidad" value="{{ paciente.localidad }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="domicilio" class="form-label">Domicilio</label>
+            <input type="text" class="form-control" id="domicilio" name="domicilio" value="{{ paciente.domicilio }}">
+        </div>
+
+        <!-- Botón para enviar el formulario de actualización -->
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    </form>
+</div>
 {% endblock %}
