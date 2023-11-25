@@ -16,31 +16,31 @@
 
 ## Diseño
 
-- Estructura de archivos: 
-   - ├── src/
-   - │   ├── app.py
-   - │   ├── config.sql
-   - │   ├── utils/
-   - │   ├── templates/
-   - │   │   ├── ...
-   - │   │   ├── auth/
-   - │   │   │   ├── login.html
-   - │   │   │   └── register.html
-   - │   ├── static/
-   - │   │   ├── css/
-   - │   │   │   └── ...
-   - │   │   └── images/
-   - │   │   │   └── ...
-   - │   ├── routes/
-   - │   │   └── ...
-   - │   ├── models/
-   - │   │   ├── entites/
-   - │   │   │   └── ...
-   - │   │   └── ...
-   - │   ├── database/
-   - │       └── ...
-   - ├── .venv/
-   - ├── README.md
+- Estructura de archivos:
+   - src/
+      - app.py
+      - config.sql
+      - utils/
+      - templates/
+         - ...
+         - auth/
+            - login.html
+            - register.html
+      - static/
+         - css/
+            - ...
+         - images/
+            - ...
+      - routes/
+         - ...
+      - models/
+         - entities/
+            - ...
+         - ...
+      - database/
+         - ...
+   - .venv/
+   - README.md
 
 ## Base de datos:
 Se opto por utilizar una base de datos relacional en postgreSQL
