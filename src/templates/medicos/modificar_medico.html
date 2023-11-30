@@ -1,0 +1,46 @@
+
+{% extends './main.html' %}
+
+{% block titulo %}
+Modificar Información del Medico
+{% endblock %}
+
+{% block content %}
+<div>
+    <h2>Modificar Información del Medico</h2>
+    
+    <form method="post" action="{{ url_for('medico_blueprint.modificar_medico', id=current_user.id) }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">  
+      <div class="mb-3">
+            <label for="documento" class="form-label">Documento</label>
+            <input type="text" class="form-control" id="documento" name="documento" value="{{ medico.numDoc }}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" value="{{ medico.nombre }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="apellido" class="form-label">Apellido</label>
+            <input type="text" class="form-control" id="apellido" name="apellido" value="{{ medico.apellido }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="apellido" class="form-label">Legajo</label>
+            <input type="text" class="form-control" id="legajo" name="legajo" value="{{ medico.legajo }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ medico.email }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input type="tel" class="form-control" id="telefono" name="telefono" value="{{ medico.telefono }}">
+        </div>
+        <div class="mb-3">
+            <label for="domicilio" class="form-label">Domicilio</label>
+            <input type="text" class="form-control" id="domicilio" name="domicilio" value="{{ medico.domicilio }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    </form>
+
+</div>
+{% endblock %}
