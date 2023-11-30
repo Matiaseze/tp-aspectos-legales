@@ -11,28 +11,30 @@ create table usuarios (id INT,
 					   clave VARCHAR(50),
 					   t_usuario INT,
 					   mail VARCHAR(99),
-					  CONSTRAINT "pkUsuario" PRIMARY KEY (id_usuario),
+					  CONSTRAINT "pkUsuario" PRIMARY KEY (id),
 					  CONSTRAINT "fkTipoUsuario" FOREIGN KEY (t_usuario)
 					  REFERENCES tipo_usuario (cod_tipo)
 					  );
-
-create table pacientes (num_doc INT,
+					  
+create table pacientes (id INT,
+						num_doc INT,
 						nombre VARCHAR(99),
 						apellido VARCHAR(99),
 						mail VARCHAR(99),
 						telefono VARCHAR(99),
 						domicilio VARCHAR(99),
-						CONSTRAINT "pkPaciente" PRIMARY KEY (num_doc)
+						CONSTRAINT "pkPaciente" PRIMARY KEY (id, num_doc)
 						);
 
-create table medicos (num_doc INT,
+create table medicos	(id INT,
+					  	num_doc INT,
 						nombre VARCHAR(99),
 						apellido VARCHAR(99),
 						legajo VARCHAR(4),
 						mail VARCHAR(99),
 						telefono VARCHAR(99),
 						domicilio VARCHAR(99),
-						CONSTRAINT "pkDoctor" PRIMARY KEY (num_doc)
+						CONSTRAINT "pkDoctor" PRIMARY KEY (id, num_doc)
 						);
 
 INSERT INTO public.tipo_usuario(
@@ -71,8 +73,8 @@ CREATE OR REPLACE FUNCTION registro_usuario()
 RETURNS TRIGGER AS $$
 BEGIN
 	IF NEW.t_usuario = 1 THEN
-		INSERT INTO pacientes(num_doc,nombre,apellido,mail,telefono,domicilio)
-		VALUES (CAST(NEW.usuario AS INT), '','',NEW.mail,'','');
+		INSERT INTO pacientes(id,num_doc,nombre,apellido,mail,telefono,domicilio)
+		VALUES (NEW.id, CAST(NEW.usuario AS INT), '','',NEW.mail,'','');
 		
 	END IF;
 	RETURN NEW;
@@ -83,3 +85,4 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER usuario_registrado AFTER INSERT ON usuarios FOR EACH ROW EXECUTE FUNCTION registro_usuario();
 
 select * from usuarios
+SELECT id, num_doc, nombre, apellido, mail, telefono, domicilio FROM pacientes WHERE id = 5

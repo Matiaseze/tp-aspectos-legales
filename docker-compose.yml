@@ -9,6 +9,8 @@ services:
       - "7000:7000"
     depends_on:
       - dbpg
+    networks:
+      - flask-net
 
   dbpg:
     image: postgres:latest
@@ -25,3 +27,9 @@ services:
     volumes: 
       - ./postgres_data:/var/lib/postgresql/data/
       - ./backup.sql:/docker-entrypoint-initdb.d/backup.sql
+    networks:
+      - flask-net
+
+networks:
+  flask-net:
+    driver: bridge
