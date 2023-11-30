@@ -7,26 +7,29 @@
         <table id="data" class="table table-striped">
             <thead>
                 <tr>
+                    <th>Usuario</th>
                     <th>Documento</th>
                     <th>Nombre y apellido</th>
                     <th>E-Mail</th>
+                    <th>Legajo</th>
                     <th>Telefono</th>
                     <th>Domicilio</th>
                 </tr>
             </thead>
             <tbody>
-                {% for paciente in pacientes %}
+                {% for medico in medicos %}
                 <tr>
-                    <td>{{ current_user.usuario }}</td>
-                    <td>{{ paciente.nombre }} {{ paciente.apellido }}</td>
-                    <td>{{ paciente.email }}</td>
-                    <td>{{ paciente.telefono }}</td>
-                    <td>{{ paciente.localidad }}</td>
-                    <td>{{ paciente.direccion }}</td>
+                    <td>{{ usuario.usuario }}</td>
+                    <td>{{ medico.nombre }} {{ medico.apellido }}</td>
+                    <td>{{ medico.email }}</td>
+                    <td>{{ medico.legajo }}</td>
+                    <td>{{ medico.telefono }}</td>
+                    <td>{{ medico.localidad }}</td>
+                    <td>{{ medico.direccion }}</td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td>No hay pacientes</td>
+                    <td>No hay medicos</td>
                     <td>n/a</td>
                     <td>n/a</td>
                     <td>n/a</td>

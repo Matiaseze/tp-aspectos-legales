@@ -1,0 +1,23 @@
+{% extends './main.html' %}
+
+{% block titulo %}
+Información del Medico
+{% endblock %}
+
+{% block content %}
+<div>
+    <div class="row mb-6">
+        <h2>Información del Medico</h2>
+        <p><strong>Numero de de Documento:</strong> {{medico.numDoc }}</p>
+        <p><strong>Nombre:</strong> {{ medico.nombre }}</p>
+        <p><strong>Apellido:</strong> {{ medico.apellido }}</p>
+        <p><strong>Legajo:</strong> {{ medico.legajo }}</p>
+        <p><strong>Email:</strong> {{ medico.email }}</p>
+        <p><strong>Telefono:</strong> {{ medico.telefono }}</p>
+        <p><strong>Domicilio:</strong> {{ medico.domicilio }}</p>
+    </div>
+    <a href="{{ url_for('medico_blueprint.modificar_medico', id=medico.id) }}" class="btn btn-primary" data-bs-toggle="" data-bs-target="#editarMedico">
+        Editar Información
+    </a>
+</div>
+{% endblock %}
