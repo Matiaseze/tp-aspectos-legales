@@ -22,16 +22,15 @@ class PacienteModel():
             raise Exception(ex)
         
     @classmethod
-    def get_paciente(self, num_doc):
+    def get_paciente(self, id):
         try:
             connection=get_connection()
-
             with connection.cursor() as cursor:
-                cursor.execute("SELECT num_doc, nombre, apellido, mail, telefono, domicilio FROM pacientes WHERE num_doc = %s",(num_doc,))
+                cursor.execute("SELECT id, num_doc, nombre, apellido, mail, telefono, domicilio FROM pacientes WHERE id = %s",(id,))
                 row=cursor.fetchone()
                 paciente = None
                 if row is not None:
-                    paciente=Paciente(row[0],row[1],row[2],row[3],row[4],row[5])
+                    paciente=Paciente(row[0],row[1],row[2],row[3],row[4],row[5],row[6])
             
             connection.close()
             return paciente
@@ -39,19 +38,18 @@ class PacienteModel():
             raise Exception(ex)
     
     @classmethod
-    def actualizar_paciente(self, num_doc, nombre, apellido, mail, telefono, domicilio):
+    def actualizar_paciente(self, id, documento, nombre, apellido, mail, telefono, domicilio):
         try:
             connection = get_connection()
 
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "UPDATE pacientes SET nombre = %s, apellido = %s, mail = %s, telefono = %s, domicilio = %s WHERE num_doc = %s",
-                    (nombre, apellido, mail, telefono, domicilio, num_doc))
+                    "UPDATE pacientes SET num_doc= %s, nombre= %s, apellido= %s, mail= %s, telefono= %s, domicilio=%s WHERE id = %s",
+                    (documento, nombre, apellido, mail, telefono, domicilio, id))
 
             connection.commit()
             return True
         except Exception as ex:
-            print(f"Error al actualizar paciente: {ex}")
-            return False
+            raise Exception(ex)
         finally:
             connection.close()

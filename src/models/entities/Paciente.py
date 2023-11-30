@@ -1,7 +1,8 @@
 from flask_login import UserMixin
 class Paciente(UserMixin):
 
-    def __init__(self,numDoc, nombre, apellido, email,telefono, domicilio) -> None:
+    def __init__(self,id, numDoc, nombre, apellido, email,telefono, domicilio) -> None:
+        self.id=id
         self.numDoc=numDoc
         self.nombre=nombre
         self.apellido=apellido
@@ -11,6 +12,7 @@ class Paciente(UserMixin):
 
     def to_JSON(self):
         return {
+            'id' : self.id,
             'numDoc' : self.numDoc,
             'nombre' : self.nombre,
             'apellido' : self.apellido,

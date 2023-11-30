@@ -6,14 +6,14 @@ from flask_wtf.csrf import CSRFProtect
 from flask_mail import Mail, Message
 
 #Rutas
-from routes import Usuario, Paciente
+from routes import Usuario, Paciente, Medico
 #Modelos
 from models.UsuarioModel import UsuarioModel
 
 from models.entities.Usuario import Usuario as User
 
 app = Flask(__name__)
-csrf=CSRFProtect(app)
+csrf=CSRFProtect()
 
 login_manager_app = LoginManager(app)
 
@@ -43,6 +43,11 @@ def login():
         logged_user = UsuarioModel.login(user)
 
         if logged_user is not None:
+
+            if not logged_user.is_confirmed:
+                flash("El usuario no está confirmado. Por favor, verifica tu correo electrónico.", 'danger')
+                return render_template('auth/login.html')
+
             if logged_user.clave:
                 login_user(logged_user)
                 return redirect(url_for('home'))
@@ -59,23 +64,18 @@ def signup():
     return render_template('auth/register.html')
 
 @app.route('/register', methods=['GET', 'POST'])
-@csrf.exempt
 def register():
     if request.method == 'POST':
         # Recopilar datos del formulario
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
-
-        print('DEBUG')
-        print(f'Usuario: {username}, Email: {email}, Contraseña: {password}')
-
-        # Crear un usuario en la base de datos
+        
         user = User(id=0, nombre=username, mail=email, clave=password, is_confirmed=False, t_usuario=1)
-        print('DEBUG')
-        print (user)
+
         if user is not None:
             print('Usuario no es none')
+            print ('si usuario con el mismo mail y mismo nombre de usuario existe')
             UsuarioModel.add_usuario(user)
 
 
@@ -128,11 +128,12 @@ def pag_unauthorized(error):
 #Blueprints
 app.register_blueprint(Usuario.main, url_prefix=('/usuarios'))
 app.register_blueprint(Paciente.main, url_prefix=('/pacientes'))
-
+app.register_blueprint(Medico.main, url_prefix=('/medicos'))
 
 if __name__ == '__main__' :
 
     app.config.from_object(config['development'])
+    
     app.config['WTF_CSRF_ENABLED'] = True
     app.config['SECURITY_PASSWORD_SALT'] = '29$9VZ@!9RknEh4m'
     csrf.init_app(app)

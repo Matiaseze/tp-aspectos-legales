@@ -104,13 +104,12 @@ class UsuarioModel():
             connection=get_connection()
 
             with connection.cursor() as cursor:
-                cursor.execute("INSERT INTO usuarios (id, usuario, clave, t_usuario, mail, is_confirmed) VALUES ((SELECT COUNT(id)+1 FROM usuarios),%s, %s, %s, %s, %s)", (usuario.nombre, clave, usuario.t_usuario, usuario.mail, usuario.is_confirmed))
-                print ('usuario insertado')
+                cursor.execute("INSERT INTO usuarios (id, usuario, clave, t_usuario, mail, is_confirmed) VALUES ((SELECT COUNT(id)+1 FROM usuarios),%s, %s, %s, %s, %s)", 
+                               (usuario.nombre, clave, usuario.t_usuario, usuario.mail, usuario.is_confirmed))
                 connection.commit()
             return True
         except Exception as ex:
-            print(f"Error al agregar usuario: {ex}")
-            return False
+            raise Exception(ex)
         finally:
             connection.close()
         

@@ -1,26 +1,26 @@
 from flask import Blueprint, jsonify, render_template, request, flash, redirect, url_for
 from flask_login import current_user
 #Modelos
-from models.PacienteModel import PacienteModel
+from models.MedicoModel import MedicoModel
 
 
-main=Blueprint('paciente_blueprint',__name__)
+main=Blueprint('medico_blueprint',__name__)
 
 
 @main.route('/')
-def get_pacientes():
+def get_medicos():
     try:
-        pacientes=PacienteModel.get_pacientes()
-        return jsonify(pacientes)
+        medicos=MedicoModel.get_medicos()
+        return jsonify(medicos)
     except Exception as ex:
         return jsonify({'message' : str(ex)}),500
     
 @main.route('/<id>')
-def get_paciente(id):
+def get_medico(id):
     try:
-        paciente=PacienteModel.get_paciente(id)
-        if paciente is not None:
-            return jsonify(paciente)
+        medico=MedicoModel.get_medico(id)
+        if medico is not None:
+            return jsonify(medico)
         else:
             return jsonify({}), 404
 
@@ -28,58 +28,58 @@ def get_paciente(id):
         return jsonify({'message' : str(ex)}),500
     
 @main.route('/info')
-def ver_info_paciente():
+def ver_info_medico():
     try:
         id = current_user.id
         
-        paciente = PacienteModel.get_paciente(id)
+        medico = MedicoModel.get_medico(id)
         
-        if paciente is not None:
-            return render_template('pacientes/mi_info.html', paciente=paciente)
+        if medico is not None:
+            return render_template('medicos/mi_info.html', medico=medico)
         else:
-            flash('Paciente no encontrado', 'danger')
+            flash('medico no encontrado', 'danger')
 
     except Exception as ex:
         print(ex)
-        flash('Error al obtener la información del paciente', 'danger')
+        flash('Error al obtener la información del medico', 'danger')
         return redirect(url_for('home'))
     
 @main.route('/<id>/modificar', methods=['GET', 'POST'])
 
-def modificar_paciente(id):
+def modificar_medico(id):
     if request.method == 'GET':
         try:
             print('entro aca')
-            paciente = PacienteModel.get_paciente(id)
-            print(paciente)
-            if paciente is not None:
-                print('paciente not none')
-                return render_template('pacientes/modificar_paciente.html', paciente=paciente)
+            medico = MedicoModel.get_medico(id)
+            print(medico)
+            if medico is not None:
+                print('medico not none')
+                return render_template('medicos/modificar_medico.html', medico=medico)
             else:
-                flash('Paciente no encontrado', 'danger')
+                flash('medico no encontrado', 'danger')
                 return redirect(url_for('home'))
         except Exception as ex:
             print(ex)
-            flash('Error al obtener la información del paciente', 'danger')
+            flash('Error al obtener la información del medico', 'danger')
             return redirect(url_for('home'))
     elif request.method == 'POST':
-        print('en POST')
         try:
             # Recuperar datos del formulario
             documento = request.form.get('documento')
             nombre = request.form.get('nombre')
             apellido = request.form.get('apellido')
+            legajo = request.form.get('legajo')
             email = request.form.get('email')
             telefono = request.form.get('telefono')
             domicilio = request.form.get('domicilio')
             print('datos recuperados')
-            if PacienteModel.actualizar_paciente(id, documento, nombre, apellido, email, telefono, domicilio):
-                flash('Información del paciente actualizada correctamente', 'success')
+            if MedicoModel.actualizar_medico(id, documento, nombre, apellido,legajo, email, telefono, domicilio):
+                flash('Información del medico actualizada correctamente', 'success')
             else:
-                flash('Error al actualizar la información del paciente', 'danger')
+                flash('Error al actualizar la información del medico', 'danger')
 
             return redirect(url_for('home'))
         except Exception as ex:
             print(ex)
-            flash('Error al actualizar la información del paciente', 'danger')
+            flash('Error al actualizar la información del medico', 'danger')
             return redirect(url_for('home'))
