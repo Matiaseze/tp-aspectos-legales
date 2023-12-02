@@ -54,7 +54,7 @@ Se opto por utilizar una base de datos relacional en postgreSQL
     Link para descargar: https://git-scm.com/downloads
 
 ## Correr aplicacion
-- Una vez que se cumple con lo requisitos previos hay que descargar el repositorio desde *GitHub*. Para ello abriremos una consola de *git bash*, nos desplazaremos al directorio en el cual clonar el repositorio y ejecutar el comando `git clone https://github.com/Matiaseze/tp-apectos-legales.git` 
+- Una vez que se cumple con lo requisitos previos hay que descargar el repositorio desde *GitHub*. Para ello abriremos una consola de *git bash*, nos desplazaremos al directorio en el cual clonar el repositorio y ejecutar el comando `git clone https://github.com/Matiaseze/tp-aspectos-legales.git` 
 
 - Una vez descargado nos situaremos dentro del directorio con el comando `cd tp-aspectos-legales/`
 
