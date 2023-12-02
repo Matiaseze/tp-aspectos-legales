@@ -25,8 +25,7 @@ class MedicoModel():
     def get_medico(self, id):
         try:
             connection=get_connection()
-            print("buscando")
-            print(id)
+
             with connection.cursor() as cursor:
                 cursor.execute("SELECT id, num_doc, nombre, apellido,legajo, mail, telefono, domicilio FROM medicos WHERE id = %s",(id,))
                 row=cursor.fetchone()
@@ -35,7 +34,7 @@ class MedicoModel():
                     medico=Medico(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7])
             
             connection.close()
-            print(medico.numDoc)
+
             return medico
         except Exception as ex:
             raise Exception(ex)

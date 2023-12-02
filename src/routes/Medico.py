@@ -40,7 +40,6 @@ def ver_info_medico():
             flash('medico no encontrado', 'danger')
 
     except Exception as ex:
-        print(ex)
         flash('Error al obtener la información del medico', 'danger')
         return redirect(url_for('home'))
     
@@ -49,17 +48,17 @@ def ver_info_medico():
 def modificar_medico(id):
     if request.method == 'GET':
         try:
-            print('entro aca')
+  
             medico = MedicoModel.get_medico(id)
-            print(medico)
+
             if medico is not None:
-                print('medico not none')
+
                 return render_template('medicos/modificar_medico.html', medico=medico)
             else:
                 flash('medico no encontrado', 'danger')
                 return redirect(url_for('home'))
         except Exception as ex:
-            print(ex)
+
             flash('Error al obtener la información del medico', 'danger')
             return redirect(url_for('home'))
     elif request.method == 'POST':
@@ -72,7 +71,7 @@ def modificar_medico(id):
             email = request.form.get('email')
             telefono = request.form.get('telefono')
             domicilio = request.form.get('domicilio')
-            print('datos recuperados')
+
             if MedicoModel.actualizar_medico(id, documento, nombre, apellido,legajo, email, telefono, domicilio):
                 flash('Información del medico actualizada correctamente', 'success')
             else:
@@ -80,6 +79,6 @@ def modificar_medico(id):
 
             return redirect(url_for('home'))
         except Exception as ex:
-            print(ex)
+
             flash('Error al actualizar la información del medico', 'danger')
             return redirect(url_for('home'))

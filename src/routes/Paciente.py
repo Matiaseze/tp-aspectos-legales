@@ -40,7 +40,7 @@ def ver_info_paciente():
             flash('Paciente no encontrado', 'danger')
 
     except Exception as ex:
-        print(ex)
+
         flash('Error al obtener la información del paciente', 'danger')
         return redirect(url_for('home'))
     
@@ -49,21 +49,21 @@ def ver_info_paciente():
 def modificar_paciente(id):
     if request.method == 'GET':
         try:
-            print('entro aca')
+
             paciente = PacienteModel.get_paciente(id)
-            print(paciente)
+
             if paciente is not None:
-                print('paciente not none')
+
                 return render_template('pacientes/modificar_paciente.html', paciente=paciente)
             else:
                 flash('Paciente no encontrado', 'danger')
                 return redirect(url_for('home'))
         except Exception as ex:
-            print(ex)
+
             flash('Error al obtener la información del paciente', 'danger')
             return redirect(url_for('home'))
     elif request.method == 'POST':
-        print('en POST')
+
         try:
             # Recuperar datos del formulario
             documento = request.form.get('documento')
@@ -72,7 +72,7 @@ def modificar_paciente(id):
             email = request.form.get('email')
             telefono = request.form.get('telefono')
             domicilio = request.form.get('domicilio')
-            print('datos recuperados')
+  
             if PacienteModel.actualizar_paciente(id, documento, nombre, apellido, email, telefono, domicilio):
                 flash('Información del paciente actualizada correctamente', 'success')
             else:
@@ -80,6 +80,6 @@ def modificar_paciente(id):
 
             return redirect(url_for('home'))
         except Exception as ex:
-            print(ex)
+
             flash('Error al actualizar la información del paciente', 'danger')
             return redirect(url_for('home'))

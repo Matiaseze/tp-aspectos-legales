@@ -3,8 +3,9 @@ version: '3.8'
 services:
   flask-app:
     build: . 
+    command: python src/app.py 
     volumes:
-      - ./src:/app
+      - .:/app
     ports:
       - "7000:7000"
     depends_on:
@@ -13,7 +14,7 @@ services:
       - flask-net
 
   dbpg:
-    image: postgres:latest
+    image: postgres:13
     env_file: 
       - .env
     ports: 

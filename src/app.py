@@ -4,7 +4,7 @@ from utils.auth_confirm import confirm_token, generate_confirmation_token
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_wtf.csrf import CSRFProtect
 from flask_mail import Mail, Message
-
+from database.db import get_connection
 #Rutas
 from routes import Usuario, Paciente, Medico
 #Modelos
@@ -17,6 +17,8 @@ csrf=CSRFProtect()
 
 login_manager_app = LoginManager(app)
 
+db = get_connection()
+
 @login_manager_app.user_loader
 def load_user(id):
     return UsuarioModel.get_usuario_id(id)
@@ -27,7 +29,7 @@ app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'matyaseze777@gmail.com'
 app.config['MAIL_PASSWORD'] = 'tdhn ksed kzpl pdkc'
-app.config['MAIL_DEFAULT_SENDER'] = 'matyaseze777@gmail.com'
+app.config['MAIL_DEFAULT_SENDER'] = '(John Doe, johndoe@jdoe.com)'
 mail = Mail(app)
 
 
@@ -43,10 +45,10 @@ def login():
         logged_user = UsuarioModel.login(user)
 
         if logged_user is not None:
-
-            if not logged_user.is_confirmed:
-                flash("El usuario no está confirmado. Por favor, verifica tu correo electrónico.", 'danger')
-                return render_template('auth/login.html')
+            if logged_user.t_usuario == 1:
+                if not logged_user.is_confirmed:
+                    flash("El usuario no está confirmado. Por favor, verifica tu correo electrónico.", 'danger')
+                    return render_template('auth/login.html')
 
             if logged_user.clave:
                 login_user(logged_user)
@@ -71,10 +73,9 @@ def register():
         email = request.form['email']
         password = request.form['password']
         
-        user = User(id=0, nombre=username, mail=email, clave=password, is_confirmed=False, t_usuario=1)
+        user = User(id=0, usuario=username,clave=password, mail=email, t_usuario=1, is_confirmed=False)
 
         if user is not None:
-            print('Usuario no es none')
             print ('si usuario con el mismo mail y mismo nombre de usuario existe')
             UsuarioModel.add_usuario(user)
 
@@ -100,9 +101,11 @@ def confirm_email(token):
         flash('El enlace de confirmación es inválido o ha expirado.', 'danger')
         return redirect(url_for('login'))
     
-    user = UsuarioModel.get_usuario_mail(email)
-    print(user)
-    flash (UsuarioModel.user_confirmed(user))
+    usuario = UsuarioModel.get_usuario_mail(email)
+    print('DEBUG: confirm_mail')
+    print(usuario.is_confirmed)
+
+    flash (UsuarioModel.user_confirmed(usuario))
 
     return redirect(url_for('login'))
     
@@ -115,7 +118,7 @@ def logout():
 @app.route('/home')
 @login_required
 def home():
-    tipo_usuario = UsuarioModel.get_tipo_usuario(current_user.nombre)
+    tipo_usuario = UsuarioModel.get_tipo_usuario(current_user.usuario)
     return render_template('home.html', tipo_usuario=tipo_usuario)
 
 def page_not_found(error):
@@ -136,6 +139,7 @@ if __name__ == '__main__' :
     
     app.config['WTF_CSRF_ENABLED'] = True
     app.config['SECURITY_PASSWORD_SALT'] = '29$9VZ@!9RknEh4m'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@dbpg:5432/flask-restapi'
     csrf.init_app(app)
     #Manejador, error 404
     app.register_error_handler(404, page_not_found)
