@@ -62,7 +62,7 @@ Se opto por utilizar una base de datos relacional en postgreSQL
 `docker-compose up -d ` 
 El cual levanta dos imagenes, una de la base de datos postgres para almacenar datos e informacion de los usuarios de la aplicacion y la otra es la aplicacion en cuestion en un entorno aislado y configurado para funcione de acuerdo a los requerimientos necesarios.
 
-NOTA: en caso de no poder logearse es probable que el dump no se haya ejecutado cuando inicio el contenedor. Utilizar el comando `docker exec tp-apectos-legales-dbpg-1 pg_restore -U postgres -d flask-restapi < /docker-entrypoint-initdb.d/backup.sql`. luego de ejecutarlo comprobar la aplicacion.
+NOTA: en caso de no poder logearse es probable que el dump no se haya ejecutado cuando inicio el contenedor. Utilizar el comando `docker exec tp-aspectos-legales-dbpg-1 pg_restore -U postgres -d flask-restapi < /docker-entrypoint-initdb.d/backup.sql`. luego de ejecutarlo comprobar la aplicacion.
 
 # Abrir la app
 http://localhost:7000/
