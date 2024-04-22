@@ -1,0 +1,72 @@
+<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="height: 100vh; width: 280px;">
+    <a href="{{ url_for('home')}}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+      <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+      <span class="fs-4">Inicio</span>
+    </a>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+
+      {% if tipo_usuario == 3 %}
+
+      <li class="mb-1">
+        <button class="btn btn-toggle d-inline-flex align-items-center text-white rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#usuario-collapse" aria-expanded="false">
+          Usuarios
+        </button>
+        <div class="collapse" id="usuario-collapse">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <li><a href="#" class="link-body-emphasis d-inline-flex text-white rounded">Alta de usuario</a></li>
+            <li><a href="#" class="link-body-emphasis d-inline-flex text-white rounded">Listar</a></li>
+          </ul>
+        </div>
+      </li>
+
+      {% endif %}
+
+
+      {% if tipo_usuario == 2 or tipo_usuario == 3 %}
+      <li class="mb-1">
+        <button class="btn btn-toggle d-inline-flex align-items-center text-white rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#paciente-collapse" aria-expanded="false">
+          Pacientes
+        </button>
+        <div class="collapse" id="paciente-collapse">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <li><a href="#" class="link-body-emphasis d-inline-flex text-white rounded">Alta de paciente</a></li>
+            <li><a href="#" class="link-body-emphasis d-inline-flex text-white rounded">Listar</a></li>
+          </ul>
+        </div>
+      </li>
+
+      {% endif %}
+      {% if tipo_usuario == 3 %}
+      <li class="mb-1">
+        <button class="btn btn-toggle d-inline-flex align-items-center text-white rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#medico-collapse" aria-expanded="false">
+          Medicos
+        </button>
+        <div class="collapse" id="medico-collapse">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <li><a href="#" class="link-body-emphasis d-inline-flex text-white rounded">Alta de medico</a></li>
+            <li><a href="#" class="link-body-emphasis d-inline-flex text-white rounded">Listar</a></li>
+          </ul>
+        </div>
+      </li>
+
+      {% endif %}
+  </ul>
+    <hr>
+    <div class="dropdown">
+      <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+        <img src="static/images/person-login.png" alt="" width="32" height="32" class="rounded-circle me-2">
+        <strong>{{ current_user.usuario }}</strong>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+        {% if not tipo_usuario == 3 %}
+        <li>
+            <a href="{{ url_for('paciente_blueprint.ver_info_paciente', id=current_user.usuario) }}" class="nav-link text-white">
+                Mi info
+            </a>
+        </li>
+        {% endif %}
+        <li><a class="nav-link text-white" href="{{ url_for('logout')}}"> Logout </a></li>
+      </ul>
+    </div>
+  </div>

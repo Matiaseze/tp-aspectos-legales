@@ -1,0 +1,24 @@
+{% extends './main.html' %}
+
+{% block titulo %}
+Paciente 
+{% endblock %}
+
+{% block content %}
+<div>
+    <div class="row mb-6">
+        <h2>Información del Paciente</h2>
+        <p><strong>Numero de de Documento:</strong> {{ paciente.numDoc }}</p>
+        <p><strong>Nombre:</strong> {{ paciente.nombre }}</p>
+        <p><strong>Apellido:</strong> {{ paciente.apellido }}</p>
+        <p><strong>Email:</strong> {{ paciente.email }}</p>
+        <p><strong>Telefono:</strong> {{ paciente.telefono }}</p>
+        <p><strong>Domicilio:</strong> {{ paciente.domicilio }}</p>
+    </div>
+    <a href="{{ url_for('paciente_blueprint.modificar_paciente', id=paciente.id) }}" class="btn btn-primary" data-bs-toggle="" data-bs-target="#editarPaciente">
+        Editar Información
+    </a>
+</div>
+
+
+{% endblock %}

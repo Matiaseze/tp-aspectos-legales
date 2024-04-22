@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block container %}
+<div class="row">
+    <div class="col-md-12">
+        <h1>Listado de pacientes</h1>
+        <table id="data" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Documento</th>
+                    <th>Nombre y apellido</th>
+                    <th>E-Mail</th>
+                    <th>Legajo</th>
+                    <th>Telefono</th>
+                    <th>Domicilio</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for medico in medicos %}
+                <tr>
+                    <td>{{ usuario.usuario }}</td>
+                    <td>{{ medico.nombre }} {{ medico.apellido }}</td>
+                    <td>{{ medico.email }}</td>
+                    <td>{{ medico.legajo }}</td>
+                    <td>{{ medico.telefono }}</td>
+                    <td>{{ medico.localidad }}</td>
+                    <td>{{ medico.direccion }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td>No hay medicos</td>
+                    <td>n/a</td>
+                    <td>n/a</td>
+                    <td>n/a</td>
+                    <td>n/a</td>
+                    <td>n/a</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

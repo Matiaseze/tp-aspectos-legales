@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  flask-app:
+    build: . 
+    command: python src/app.py 
+    volumes:
+      - .:/app
+    ports:
+      - "7000:7000"
+    depends_on:
+      - dbpg
+    networks:
+      - flask-net
+
+  dbpg:
+    image: postgres:13
+    env_file: 
+      - .env
+    ports: 
+      - "5432:5432"
+    expose: 
+      - "5432"  
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=flask-restapi
+    volumes: 
+      - ./postgres_data:/var/lib/postgresql/data/
+      - ./backup.sql:/docker-entrypoint-initdb.d/backup.sql
+    networks:
+      - flask-net
+
+networks:
+  flask-net:
+    driver: bridge

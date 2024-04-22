@@ -1,0 +1,58 @@
+{% extends './base.html' %}
+
+{% block titulo %}
+Login
+{% endblock  %}
+
+{% block customCSS %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock  %}
+
+{% block message %}
+
+{% endblock %}
+
+{% block container %}
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <h1 class="text-center mb-4">Bienvenido al Sistema Hospitalario John Doe S.A</h1>
+
+                <form class="form-login" action="/login" method='POST'>
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <div class="alert alert-primary alert-dismissible" role="alert">
+                                {% for message in messages %}
+                                    <strong>{{ message }}</strong>
+                                {% endfor %}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                    <h1 class="h3 mb-3 fw-normal text-center">Ingresar al sistema</h1>
+
+                    <div class="form-floating mb-3">
+                        <input type="username" class="form-control" id="username" name="username" placeholder="Username">
+                        <label for="username">N° de documento</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                        <label for="password">Contraseña</label>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" type="submit">Ingresar</button>
+                    </div>
+
+                    <div class="text-center mt-3">
+                      <p>No tienes usuario? <a href="{{ url_for('signup') }}">Registrarte!</a> </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

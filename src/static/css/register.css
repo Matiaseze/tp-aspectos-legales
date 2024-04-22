@@ -1,0 +1,54 @@
+/* Estilos para la ventana modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#acceptButton:disabled {
+    opacity: 0.5;
+}
+
+#termsText {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#termsCheckbox {
+    margin-bottom: 10px;
+}
+.form-floating {
+    position: relative;
+}
+
+.form-floating input.custom-input {
+    position: relative;
+    z-index: 1;
+}
+
+.form-floating input.custom-input::placeholder {
+    color: transparent;
+}
+
+.form-floating input.custom-input::before {
+    content: '#########';
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    padding: 5px;
+    color: #6c757d;
+}

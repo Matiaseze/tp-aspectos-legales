@@ -1,0 +1,28 @@
+{% extends './base.html' %}
+
+{% block customCSS %}
+
+{% endblock %}
+
+{% block container %}
+<div class="container-fluid">
+    <div class="row d-flex justify-content-start">
+
+        <div class="col-3 mt-2">
+                {% block sidebar %}
+                    {% include 'sidebar.html' %}
+                {% endblock %}
+        </div>
+
+        <div class="col-8 mt-4" style="text-align: start;">
+            {% block content %}
+
+            {% endblock %}
+        </div>
+    </div>
+
+</div>
+
+
+</div>
+{% endblock %}
